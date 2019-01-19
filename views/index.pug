@@ -9,15 +9,30 @@ html
             p 
                 h2 A Simple ToDo List App
             //-Make sure to indent the input or button. Or it would be outside of the nested form tags
-            form(action="/",method="post")
+            form(action="/addtask",method="post")
                 input(type="text",name="newtask",placeholder="add new task") 
                 button Add Task
-            
-            p  
+                button(type="reset") Reset
+             
                 h2 Added Task  
-            ul
-                each val in task
-                    li= val
+                ul
+                    each val in task
+                        li 
+                            input(type="checkbox",name="check",value=`${val}`)
+                            label(for=`${val}`) #{val}
+                        //- <input type="checkbox" name="val" value="val">
+                            <label for="val">val</label>
+            
+            h2
+            |
+            button(formaction="/removetask",type="submit") Remove
+
+            p
+                h2 Completed task
+                ul
+                    each val in completed
+                        li #{val}
+
 
             //-button(formaction="/removetask",type="submit") Remove
 

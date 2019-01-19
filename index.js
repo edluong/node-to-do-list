@@ -7,6 +7,7 @@ const port = 3000; // default port to listen on
 
 
 var task = ["buy socks","practice nodejs"];
+var completed = ["finish react"];
 
 //application settings
 app.set("views","./views")
@@ -19,7 +20,7 @@ app.use(bodyParser.urlencoded({extended: true})); //set up body parser
 
 
 //routes
-app.post("/",(req,res) => {
+app.post("/addtask",(req,res) => {
     //grab what is in the text field
     var newTask = req.body.newtask;
     
@@ -30,9 +31,14 @@ app.post("/",(req,res) => {
     res.redirect("/");
 });
 
-app.get("/",(req,res) =>{
-    res.render("index",{task:task}); //this will have the application render what is in the index views folder
+app.post("/removetask",(req,res)=>{
+    
 });
+
+app.get("/",(req,res) =>{
+    res.render("index",{task:task,completed:completed}); //this will have the application render what is in the index views folder
+});
+
 
 
 
