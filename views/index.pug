@@ -1,0 +1,28 @@
+doctype html
+html 
+    head
+        meta(charset='utf-8')
+        title To Do List
+    
+    body
+        .container
+            p 
+                h2 A Simple ToDo List App
+            //-Make sure to indent the input or button. Or it would be outside of the nested form tags
+            form(action="/",method="post")
+                input(type="text",name="newtask",placeholder="add new task") 
+                button Add Task
+            
+            p  
+                h2 Added Task  
+            ul
+                each val in task
+                    li= val
+
+            //-button(formaction="/removetask",type="submit") Remove
+
+            //-h2 Completed task
+
+        //- form(action="/create", method='post')
+        //-     input.todo-task(name='task', placeholder='Enter a task')
+        //-     input.todo-button(name='button',value='Add Task')
