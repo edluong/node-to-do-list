@@ -3,11 +3,12 @@ html
     head
         meta(charset='utf-8')
         title To Do List
+        link(rel='stylesheet',type="text/css",href="/style.css")
     
     body
         .container
             p 
-                h2 A Simple ToDo List App
+                h2 A Simple To Do List App
             //-Make sure to indent the input or button. Or it would be outside of the nested form tags
             form(action="/addtask",method="post")
                 input(type="text",name="newtask",placeholder="add new task") 
@@ -20,24 +21,13 @@ html
                         li 
                             input(type="checkbox",name="check",value=`${val}`)
                             label(for=`${val}`) #{val}
-                        //- <input type="checkbox" name="val" value="val">
-                            <label for="val">val</label>
-            
-            h2
-            |
-            button(formaction="/removetask",type="submit") Remove
+                |
+                h2
+                |
+                button(formaction="/removetask",type="submit") Remove
 
             p
-                h2 Completed task
+                h2 Completed Task
                 ul
                     each val in completed
                         li #{val}
-
-
-            //-button(formaction="/removetask",type="submit") Remove
-
-            //-h2 Completed task
-
-        //- form(action="/create", method='post')
-        //-     input.todo-task(name='task', placeholder='Enter a task')
-        //-     input.todo-button(name='button',value='Add Task')
