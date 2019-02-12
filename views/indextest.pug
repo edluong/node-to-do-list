@@ -1,0 +1,13 @@
+doctype html
+html 
+    head
+        meta(charset='utf-8')
+        title To Do List
+        link(rel='stylesheet',type="text/css",href="/style.css")
+    
+    body
+         ul
+            each val in task
+                li 
+                    input(type="checkbox",name="check",value=`${val}`)
+                    label(for=`${val}`) #{val}
