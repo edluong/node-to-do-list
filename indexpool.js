@@ -1,16 +1,19 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express();
-const {Client} = require('pg')
+const {Pool} = require('pg')
 const port = 3000;
 
 //connect to AWS RDS of PostGres
-const client = new Client({
+const pool = new Pool({
     user: 'dbmaster',
     host: 'node-todo-list.ctiqq74ve5hk.us-east-1.rds.amazonaws.com',
     database: 'postgres',
     password: '',
     port: 5432,
+    max: 20, //from node-pg docs
+    idleTimeoutMillis: 30000,  //from node-pg docs
+    connectionTimeoutMillis: 2000, //from node-pg docs
 });
 
 //SQL Queries
@@ -34,9 +37,9 @@ app.use(express.static('public')); //need express to allow access to this folder
 //get all completed tasks
 app.get('/',(req,res) =>{
     
-    client.connect();
+    pool.connect();
 
-    client.query(getListQuery,(err,result) =>{
+    pool.query(getListQuery,(err,result) =>{
         if(err){
             console.log(err);
             //res.send(err);
@@ -44,7 +47,7 @@ app.get('/',(req,res) =>{
         var task = result.rows;
         //console.log(result.rows);
         res.render('indextest',{task:task});
-        client.end();
+        //pool.end();
     });
 });
 
@@ -61,17 +64,18 @@ app.post('/addtask',(req,res)=>{
         rowMode: 'array'
     }
     //connect to the database
-    client.connect();
+    pool.connect();
 
     //run the query to insert the new task
-    client.query(insertNewTask,(err,result)=>{
+    pool.query(insertNewTask,(err,result)=>{
         //if there is an error, then log it into the console.
         if(err){
             console.log(err);
         }
     });
+    
     res.redirect('/');
-    client.end();
+    //pool.end();
 })
 
 app.listen(3000,() =>{
