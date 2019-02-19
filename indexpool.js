@@ -19,7 +19,12 @@ const pool = new Pool({
 //SQL Queries
 //get a list query
 const getListQuery = {
-    text: "SELECT task FROM list where completed = 'N'",
+    text: "SELECT task FROM list WHERE completed = 'N'",
+    rowMode: 'array'
+}
+
+const getCompletedListQuery = {
+    text: "SELECT task FROM list WHERE completed = 'Y'",
     rowMode: 'array'
 }
 
@@ -36,7 +41,9 @@ app.use(express.static('public')); //need express to allow access to this folder
 
 //get all completed tasks
 app.get('/',(req,res) =>{
-    
+    var task;
+    var completed;
+
     pool.connect();
 
     pool.query(getListQuery,(err,result) =>{
@@ -44,10 +51,17 @@ app.get('/',(req,res) =>{
             console.log(err);
             //res.send(err);
         }
-        var task = result.rows;
-        //console.log(result.rows);
-        res.render('indextest',{task:task});
-        //pool.end();
+        task = result.rows;
+
+        //get the list of completed tasks
+        pool.query(getCompletedListQuery,(err,result)=>{
+            if(err){
+                console.log(err);
+            }
+            completed = result.rows;
+            res.render('indextest',{task:task,completed:completed})
+        })
+        //res.render('indextest',{task:task});
     });
 });
 
@@ -81,8 +95,29 @@ app.post('/addtask',(req,res)=>{
 })
 
 //update completed task and show them
-app.post('/completetask',(err,result)=>{
+app.post('/completedtask',(req,res)=>{
 
+
+    var completeTask = req.body.check;
+    var completeTaskArr = [];
+
+    //console.log(completeTask);
+    completeTaskArr.push(completeTask);
+
+    const updateCompletedTask ={
+        text:"UPDATE list SET completed='Y' where task = ANY($1)",
+        values: completeTaskArr,
+        rowMode: 'array'
+    }
+
+    //console.log(updateCompletedTask);
+
+    pool.query(updateCompletedTask,[completeTaskArr],(err,result)=>{
+        if(err){
+            throw (err);
+        }
+        res.redirect('/');
+    })
 });
 
 app.listen(3000,() =>{
