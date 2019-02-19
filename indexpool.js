@@ -19,7 +19,7 @@ const pool = new Pool({
 //SQL Queries
 //get a list query
 const getListQuery = {
-    text: 'SELECT * FROM list',
+    text: "SELECT task FROM list where completed = 'N'",
     rowMode: 'array'
 }
 
@@ -70,13 +70,20 @@ app.post('/addtask',(req,res)=>{
     pool.query(insertNewTask,(err,result)=>{
         //if there is an error, then log it into the console.
         if(err){
-            console.log(err);
+            //console.log(err);
+            throw(err);
         }
+        res.redirect('/');
     });
     
-    res.redirect('/');
+    //res.redirect('/');
     //pool.end();
 })
+
+//update completed task and show them
+app.post('/completetask',(err,result)=>{
+
+});
 
 app.listen(3000,() =>{
     console.log(`Server is listening on port ${port}`);
